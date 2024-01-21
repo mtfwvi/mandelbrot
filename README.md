@@ -39,10 +39,10 @@ Most values can be customized by using the CLI (see [Usage](#usage)). Some value
 
 ```rs
 // Complex plane boundaries
-const XMIN: f32 = -2.2 as f32;
-const XMAX: f32 = 1.2 as f32;
-const YMIN: f32 = -2.0 as f32;
-const YMAX: f32 = 2.0 as f32;
+const XMIN: f64 = -2.2 as f64;
+const XMAX: f64 = 1.2 as f64;
+const YMIN: f64 = -2.0 as f64;
+const YMAX: f64 = 2.0 as f64;
 
 // Color definitions
 const WHITE: [u8; 3] = [255, 255, 255];
