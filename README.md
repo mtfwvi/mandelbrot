@@ -5,7 +5,7 @@ CLI Tool to generate mandelbrot set plots using Rust.
 ### Usage
 
 ```
-CLI Tool to generate mandelbrot set images
+CLI Tool to generate mandelbrot set plots using Rust.
 
 Usage: mandelbrot [OPTIONS]
 
