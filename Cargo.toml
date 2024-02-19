@@ -1,6 +1,6 @@
 [package]
 name = "mandelbrot"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["mtfwvi <mtfwvi@proton.me>"]
 edition = "2021"
 description = "CLI Tool to generate mandelbrot set plots using Rust."
