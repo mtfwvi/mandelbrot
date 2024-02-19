@@ -1,3 +1,4 @@
+use std::io::{stdin, stdout, Write};
 use image::RgbImage;
 use num::Complex;
 use clap::Parser;
@@ -76,15 +77,33 @@ fn main() {
     // Check if the file extension is valid
     //                                ↓ I hate this. ↓
     if !ALLOWED_EXTENSIONS.contains(&&**&Path::new(&file).extension().unwrap().to_str().unwrap().to_uppercase()) {
-        println!("ERROR: {:?} is not a valid file extension!", Path::new(&file).extension().unwrap());
+        println!("ERROR: {:?} is not a valid file extension! Aborting.", Path::new(&file).extension().unwrap());
         return;
+    }
+
+    // Check if the file already exists, and prompt the user about how to continue
+    if Path::new(&file).is_file() {
+        let mut input = String::new();
+        print!("File {} already exists. Override? (Y/N): ", file);
+        let _ = stdout().flush();
+        stdin().read_line(&mut input).expect("Please enter a valid string.");
+
+        if input.trim().to_uppercase().to_string() == "N" || input.trim().to_uppercase().to_string() == "NO" {
+            return;
+        } else if input.trim().to_uppercase().to_string() == "Y" || input.trim().to_uppercase().to_string() == "YES" {
+            // Continue. Somehow a negative elseif is not working...
+            ;
+        } else {
+            println!("ERROR: Please enter Y(es) or (N)o. Aborting.");
+            return;
+        }
     }
 
     // Warn the user if the file dimensions are too large
     if width > 4000 || height > 4000 {
         println!("WARN: Your image size ({width}x{height}) seems to be very large.");
         println!("      Be aware: This can take a long time to generate and might create");
-        println!("      memory leaks. You have been warned!")
+        println!("      memory leaks. You have been warned!");
     }
 
     // Create a spinner to display progress
