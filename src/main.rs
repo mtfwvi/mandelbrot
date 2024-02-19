@@ -80,6 +80,12 @@ fn main() {
         return;
     }
 
+    if width > 4000 || height > 4000 {
+        println!("WARN: Your image size ({width}x{height}) seems to be very large.");
+        println!("      Be aware: This can take a long time to generate and might create");
+        println!("      memory leaks. You have been warned!")
+    }
+
     // Create a spinner to display progress
     let mut spinner = Spinner::new(Spinners::Line, "Generating image...".into());
 
