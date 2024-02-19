@@ -5,10 +5,10 @@ use clap::Parser;
 use spinners::{Spinner, Spinners};
 use std::path::Path;
 
-const XMIN: f64 = -2.2 as f64;
-const XMAX: f64 = 1.2 as f64;
-const YMIN: f64 = -2.0 as f64;
-const YMAX: f64 = 2.0 as f64;
+const XMIN: f64 = -2.2f64;
+const XMAX: f64 = 1.2f64;
+const YMIN: f64 = -2.0f64;
+const YMAX: f64 = 2.0f64;
 
 const WHITE: [u8; 3] = [255, 255, 255];
 const BLACK: [u8; 3] = [0, 0, 0];
