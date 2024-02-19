@@ -63,7 +63,7 @@ fn mandelbrot(c: Complex<f64>, m: i64, l: i64) -> i64 {
 
 fn main() {
 
-    // Get all arguments from clap
+    /* Get all arguments from clap */
     let args = Args::parse();
 
     let width = args.width;
@@ -74,14 +74,16 @@ fn main() {
     let maxiterations = args.iterations;
     let limit = args.limit;
 
-    // Check if the file extension is valid
-    //                                ↓ I hate this. ↓
+    /*
+    Check if the file extension is valid
+                                    I hate this.
+                                     ↓        ↓  */
     if !ALLOWED_EXTENSIONS.contains(&&**&Path::new(&file).extension().unwrap().to_str().unwrap().to_uppercase()) {
         println!("ERROR: {:?} is not a valid file extension! Aborting.", Path::new(&file).extension().unwrap());
         return;
     }
 
-    // Check if the file already exists, and prompt the user about how to continue
+    /* Check if the file already exists, and prompt the user about how to continue */
     if Path::new(&file).is_file() {
         let mut input = String::new();
         print!("File {} already exists. Override? (Y/N): ", file);
@@ -92,38 +94,37 @@ fn main() {
             return;
         } else if input.trim().to_uppercase().to_string() == "Y" || input.trim().to_uppercase().to_string() == "YES" {
             // Continue. Somehow a negative elseif is not working...
-            ;
         } else {
             println!("ERROR: Please enter Y(es) or (N)o. Aborting.");
             return;
         }
     }
 
-    // Warn the user if the file dimensions are too large
+    /* Warn the user if the file dimensions are too large */
     if width > 4000 || height > 4000 {
         println!("WARN: Your image size ({width}x{height}) seems to be very large.");
         println!("      Be aware: This can take a long time to generate and might create");
         println!("      memory leaks. You have been warned!");
     }
 
-    // Create a spinner to display progress
+    /* Create a spinner to display progress */
     let mut spinner = Spinner::new(Spinners::Line, "Generating image...".into());
 
-    // Create an image buffer
+    /* Create an image buffer */
     let mut image = RgbImage::new(width as u32, height as u32);
 
     let col_div: f64 = maxiterations as f64 / 255.0;
 
-    // Iterate through all pixels (vertical)
+    /* Iterate through all pixels (vertical) */
     for x in 0..height {
         let re: f64 = XMIN + (x as f64 / (width as f64 - 1.0)) * (XMAX - XMIN);
-        // Iterate through all pixels (horizontal)
+        /* Iterate through all pixels (horizontal) */
         for y in 0..width {
             let im: f64 = YMIN + (y as f64 / (height as f64 - 1.0)) * (YMAX - YMIN);
             let c: Complex<f64> = Complex::new(re, im);
             let mb: i64 = mandelbrot(c, maxiterations, limit);
 
-            // Check color for pixel
+            /* Check color for pixel */
             let mut col: [u8; 3];
 
             if mb < maxiterations {
@@ -141,18 +142,19 @@ fn main() {
                 col = [shade as u8, shade as u8, shade as u8];
             }
 
-            // Set pixel in image buffer
+            /* Set pixel in image buffer */
             *image.get_pixel_mut(x as u32, y as u32) = image::Rgb(col);
         }
     }
 
-    // Save the file
-    // Be sure to keep this line above spinner.stop_and_persist(), as saving large files could take some time
+    /*
+    Save the file
+    Be sure to keep this line above spinner.stop_and_persist(), as saving large files could take some time
+    */
     image.save(file.clone()).unwrap();
 
-    // Stop the spinner
+    /* Stop the spinner */
     spinner.stop_and_persist("\x1b[32m🗸\x1b[0m", "Done! File saved under ".to_owned() + &file);
 
-    // End
     return;
 }
