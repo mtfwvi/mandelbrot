@@ -80,6 +80,7 @@ fn main() {
         return;
     }
 
+    // Warn the user if the file dimensions are too large
     if width > 4000 || height > 4000 {
         println!("WARN: Your image size ({width}x{height}) seems to be very large.");
         println!("      Be aware: This can take a long time to generate and might create");
