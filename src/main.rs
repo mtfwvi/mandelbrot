@@ -2,6 +2,7 @@ use image::RgbImage;
 use num::Complex;
 use clap::Parser;
 use spinners::{Spinner, Spinners};
+use std::path::Path;
 
 const XMIN: f64 = -2.2 as f64;
 const XMAX: f64 = 1.2 as f64;
@@ -10,6 +11,9 @@ const YMAX: f64 = 2.0 as f64;
 
 const WHITE: [u8; 3] = [255, 255, 255];
 const BLACK: [u8; 3] = [0, 0, 0];
+const ALLOWED_EXTENSIONS: [&str; 6] = [
+    "PNG", "JPG", "JPEG", "TIFF", "WEBP", "GIF"
+];
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -68,7 +72,12 @@ fn main() {
     let maxiterations = args.iterations;
     let limit = args.limit;
 
-    let mut sp = Spinner::new(Spinners::Line, "Generating image...".into());
+    if !ALLOWED_EXTENSIONS.contains(&&**&Path::new(&file).extension().unwrap().to_str().unwrap().to_uppercase()) {
+        println!("Error: {:?} is not a valid file extension!", Path::new(&file).extension().unwrap());
+        return;
+    }
+
+    let mut spinner = Spinner::new(Spinners::Line, "Generating image...".into());
 
     let mut image = RgbImage::new(width as u32, height as u32);
 
@@ -103,6 +112,6 @@ fn main() {
         }
     }
 
-    sp.stop_and_persist("\x1b[32m🗸\x1b[0m", "Done! File saved under ".to_owned() + &file);
+    spinner.stop_and_persist("\x1b[32m🗸\x1b[0m", "Done! File saved under ".to_owned() + &file);
     image.save(file).unwrap();
 }
